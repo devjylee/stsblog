@@ -14,7 +14,7 @@ CREATE TABLE board
 
 CREATE TABLE comment
 (
-  comment_number INT         NOT NULL COMMENT '댓글 번호',
+  comment_number INT         NOT NULL AUTO_INCREMENT COMMENT '댓글 번호',
   content        TEXT        NOT NULL COMMENT '댓글 내용',
   write_datetime DATETIME    NOT NULL COMMENT '작성 날짜 및 시간',
   user_email     VARCHAR(50) NOT NULL COMMENT '사용자 이메일',
@@ -24,7 +24,7 @@ CREATE TABLE comment
 
 CREATE TABLE favorite
 (
-  email        VARCHAR(50) NOT NULL COMMENT '사용자 이메일',
+  user_email        VARCHAR(50) NOT NULL COMMENT '사용자 이메일',
   board_number INT         NOT NULL COMMENT '게시물 번호'
 ) COMMENT '좋아요 테이블';
 
