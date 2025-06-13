@@ -84,3 +84,22 @@ ALTER TABLE comment
   ADD CONSTRAINT FK_board_TO_comment
     FOREIGN KEY (board_number)
     REFERENCES board (board_number);
+
+CREATE VIEW board_list_view AS
+SELECT 
+    B.board_number AS board_number,
+    B.title AS title,
+    B.content AS content,
+    I.image AS image,
+    B.favorite_count AS favorite_count,
+    B.comment_count AS comment_count,
+    B.view_count AS view_count,
+    B.write_datetime AS write_datetime,
+    B.writer_email AS writer_email,
+    U.nickname AS nickname,
+    U.profile_image AS writer_profile_image
+FROM board AS B
+INNER JOIN user AS U
+ON B.writer_email = u.email
+LEFT JOIN (SELECT board_number, ANY_VALUE(image) AS image from image GROUP BY board_number) AS I
+ON B.board_number = I.board_number;

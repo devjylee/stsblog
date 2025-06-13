@@ -340,6 +340,13 @@ Http Status - 500 (Internal Server Error)
     message: "Database Error."
 }
 
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
+}
+
 ==============================================================
 
 commentList(댓글 리스트)
@@ -403,6 +410,62 @@ Http Status - 400 (Bad Request)
 {
     code: "NU",
     message: "No Existed User."
+}
+
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
+}
+
+- 데이터 베이스 에러
+Http Status - 500 (Internal Server Error)
+{
+    code: "DE",
+    message: "Database Error."
+}
+
+==============================================================
+
+commentUpdate(댓글 수정)
+
+- request
+{
+    *board_number: int,
+    *content: string
+}
+
+- response
+
+성공
+Http Status - 200 (OK)
+{
+    code: "SU",
+    message: "Success."
+}
+
+실패
+
+- 존재하지 않는 게시물
+Http Status - 400 (Bad Request)
+{
+    code: "NB",
+    message: "No Existed Board."
+}
+
+- 존재하지 않는 유저
+Http Status - 400 (Bad Request)
+{
+    code: "NU",
+    message: "No Existed User."
+}
+
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
 }
 
 - 데이터 베이스 에러
@@ -482,6 +545,13 @@ Http Status - 400 (Bad Request)
 {
     code: "NU",
     message: "No Existed User."
+}
+
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
 }
 
 - 데이터 베이스 에러
@@ -634,6 +704,13 @@ Http Status - 400 (Bad Request)
     message: "No Existed User."
 }
 
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
+}
+
 - 데이터 베이스 에러
 Http Status - 500 (Internal Server Error)
 {
@@ -666,6 +743,13 @@ Http Status - 400 (Bad Request)
 {
     code: "NU",
     message: "No Existed User."
+}
+
+- 권한 없음
+Http Status - 403 (Forbidden)
+{
+    code: "NP",
+    message: "No Permission."
 }
 
 - 데이터 베이스 에러

@@ -26,7 +26,6 @@ UPDATE board SET title = '수정 제목입니다', content = '수정 내용입�
 DELETE FROM image WHERE board_number = 1;
 INSERT INTO image VALUES (1, 'url');
 
-
 -- 게시물 삭제
 DELETE FROM comment WHERE board_number = 1;
 DELETE FROM favorite WHERE board_number = 1;
@@ -45,48 +44,86 @@ FROM board as B
 INNER JOIN user as U
 ON B.writer_email = U.email;
 
+-- 상세 게시물 불러오기(이미지)
 SELECT image
 FROM image
 WHERE board_number = 1;
 
--- 최신 게시물 리스트 불러오기
+-- 상세 게시물 불러오기(좋아요)
 SELECT 
-    B.board_number AS board_number,
-    B.title AS title,
-    B.content AS content,
-    I.image AS image,
-    B.favorite_count AS favorite_count,
-    B.comment_count AS comment_count,
-    B.view_count AS view_count,
-    B.write_datetime AS write_datetime,
+    U.email AS email,
     U.nickname AS nickname,
-    U.profile_image AS writer_profile_image
-FROM board AS B
+    U.profile_image AS profile_image
+FROM favorite AS F
 INNER JOIN user AS U
-ON B.writer_email = u.email
-LEFT JOIN (SELECT board_number, ANY_VALUE(image) AS image from image GROUP BY board_number) AS I
-ON B.board_number = I.board_number
+ON F.user_email = U.email
+WHERE F.board_number = 1;
+
+-- 상세 게시물 불러오기(댓글)
+SELECT
+    U.nickname AS nickname,
+    U.profile_image AS profile_image,
+    C.write_datetime AS write_datetime,
+    C.content AS content
+from comment AS C
+INNER JOIN user AS U
+ON C.user_email = U.email
+WHERE C.board_number = 1
+ORDER BY write_datetime DESC;
+
+-- 최신 게시물 리스트 불러오기
+SELECT *
+FROM board_list_view
 ORDER BY write_datetime
 LIMIT 5, 5;
 
 -- 검색어 리스트
-SELECT 
-    B.board_number AS board_number,
-    B.title AS title,
-    B.content AS content,
-    I.image AS image,
-    B.favorite_count AS favorite_count,
-    B.comment_count AS comment_count,
-    B.view_count AS view_count,
-    B.write_datetime AS write_datetime,
-    U.nickname AS nickname,
-    U.profile_image AS writer_profile_image
-FROM board AS B
-INNER JOIN user AS U
-ON B.writer_email = u.email
-LEFT JOIN (SELECT board_number, ANY_VALUE(image) AS image from image GROUP BY board_number) AS I
-ON B.board_number = I.board_number
+SELECT *
+FROM board_list_view
 WHERE title LIKE '%제목%' or content LIKE '%수정%'
-ORDER BY write_datetime;
+ORDER BY write_datetime DESC;
 
 -- 주간 상위 3
+SELECT *
+FROM board_list_view
+WHERE write_datetime BETWEEN '2025-06-13 19:44' AND '2025-06-21 19:44'
+ORDER BY favorite_count DESC, comment_count DESC, view_count DESC, write_datetime DESC
+LIMIT 3;
+
+-- 특정 유저 게시물 리스트 불러오기
+SELECT *
+FROM board_list_view
+WHERE writer_email = 'email@email.com'
+ORDER BY write_datetime;
+
+-- 인기 검색어 리스트
+SELECT search_word, count(search_word) AS count
+FROM search_log
+WHERE relation IS FALSE
+GROUP BY search_word
+ORDER BY count DESC
+LIMIT 15;
+
+-- 관련 검색어 리스트
+SELECT relation_word, count(relation_word) AS count
+FROM search_log
+WHERE search_word = '검색어'
+GROUP BY relation_word
+ORDER BY count DESC
+LIMIT 15;
+
+-- 유저 정보 불러오기 / 로그인 유저 정보 불러오기
+SELECT *
+FROM user 
+WHERE email = 'email@email.com';
+
+-- 닉네임 수정
+UPDATE user 
+SET nickname = '수정 닉네임'
+WHERE email = 'email@email.com';
+
+-- 프로필 이미지 수정
+UPDATE user 
+SET profile_image = 'url2'
+WHERE email = 'email@email.com';
+
